@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import request from '@/api/request';
 import PageHome from './PageHome/index.vue';
 
 export default {
@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     handleClick() {
-      axios
+      request
         .post('/index/Apidata/dianji')
         .then((res) => {
           console.log(res);

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import request from '@/api/request';
 
 export default {
   data() {
@@ -41,7 +41,7 @@ export default {
       if (!this.username || !this.password) {
         console.log('用户名或密码不能为空');
       } else {
-        axios.get(
+        request.get(
           '/index/Jwtdata/get_token_demo',
         ).then((res) => {
           console.log(res);

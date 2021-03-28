@@ -42,62 +42,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      dataarr: [
-        {
-          name: '姓名',
-          tel: '13812127874',
-          content: '商机内容商机内容商机内容商机内容',
-          time: '2021-03-20',
-          city: '中国江苏无锡',
-          from: 'http://c.tht9702.top/vgo/?sn=115292356417&t=360',
-          id: 1,
-        },
-        {
-          name: '姓名1',
-          tel: '13812127874',
-          content: '商机内容商机内容商机内容商机内容',
-          time: '2021-03-20',
-          city: '中国江苏无锡',
-          from: 'http://c.tht9702.top/vgo/?sn=115292356417&t=360',
-          id: 2,
-        },
-        {
-          name: '姓名2',
-          tel: '13812127874',
-          content: '商机内容商机内容商机内容商机内容',
-          time: '2021-03-20',
-          city: '中国江苏无锡',
-          from: 'http://c.tht9702.top/vgo/?sn=115292356417&t=360',
-          id: 3,
-        },
-        {
-          name: '姓名3',
-          tel: '13812127874',
-          content: '商机内容商机内容商机内容商机内容',
-          time: '2021-03-20',
-          city: '中国江苏无锡',
-          from: 'http://c.tht9702.top/vgo/?sn=115292356417&t=360',
-          id: 4,
-        },
-        {
-          name: '姓名4',
-          tel: '13812127874',
-          content: '商机内容商机内容商机内容商机内容',
-          time: '2021-03-20',
-          city: '中国江苏无锡',
-          from: 'http://c.tht9702.top/vgo/?sn=115292356417&t=360',
-          id: 5,
-        },
-        {
-          name: '姓名5',
-          tel: '13812127874',
-          content: '商机内容商机内容商机内容商机内容',
-          time: '2021-03-20',
-          city: '中国江苏无锡',
-          from: 'http://c.tht9702.top/vgo/?sn=115292356417&t=360',
-          id: 6,
-        },
-      ],
+      dataarr: [],
       isLoading: false,
       showShare: false,
       options: [
@@ -129,7 +74,7 @@ export default {
   },
   created() {
     axios.get('/index/apidata/get_business.html?page=1&limit=20').then((res) => {
-      console.log(res);
+      this.dataarr = res.data.data;
     });
   },
 };

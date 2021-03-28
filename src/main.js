@@ -5,6 +5,7 @@ import router from './router';
 import store from './store';
 import './plugins/vant';
 import '@/assets/styles/reset.less';
+import './mock';
 
 Vue.config.productionTip = false;
 

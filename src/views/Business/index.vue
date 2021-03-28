@@ -37,6 +37,7 @@
 <script>
 import { Toast } from 'vant';
 import Hnavbar from '@/components/Hnavbar.vue';
+import axios from 'axios';
 
 export default {
   data() {
@@ -125,6 +126,11 @@ export default {
         this.isLoading = false;
       }, 1000);
     },
+  },
+  created() {
+    axios.get('/index/apidata/get_business.html?page=1&limit=20').then((res) => {
+      console.log(res);
+    });
   },
 };
 </script>

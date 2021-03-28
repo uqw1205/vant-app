@@ -15,6 +15,11 @@ const routes = [
     name: 'Business',
     component: () => import('../views/Business/index.vue'),
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login/index.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'About',
@@ -30,5 +35,4 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
-
 export default router;

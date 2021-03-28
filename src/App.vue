@@ -33,6 +33,13 @@ export default {
           title: '商机',
           icon: 'balance-pay',
         },
+        {
+          name: 'Login',
+          path: '/login',
+          exact: false,
+          title: '我的',
+          icon: 'user-o',
+        },
       ],
     };
   },

@@ -10,17 +10,24 @@
                 >
                     <div class="tit">
                         <div class="name">
-                            <van-badge dot> <div class="child" /> </van-badge
-                            ><span>{{ item.name }}</span>
+                            <van-badge dot color='#1989fa' v-if="item.is_read">
+                              <div class="child" />
+                            </van-badge>
+                            <van-badge dot v-else>
+                              <div class="child" />
+                            </van-badge>
+                            <span>{{ item.name }}</span>
                         </div>
-                        <div class="tel">{{ item.tel }}</div>
+                        <div class="tel">{{ item.phone }}</div>
                     </div>
                     <div class="desc-wrap">
                         <div class="desc">{{ item.content }}</div>
                         <div class="time">
-                            <span>{{ item.time }}</span>
-                            <span>{{ item.city }}</span>
-                            <span class="from-url">来源：{{ item.from }}</span>
+                            <span>{{ item.create_time|time }}</span>
+                            <span class="city">
+                              {{ item.province + item.district }}
+                            </span>
+                            <span class="from-url">来源：{{ item.url }}</span>
                         </div>
                     </div>
                 </li>
@@ -37,7 +44,7 @@
 <script>
 import { Toast } from 'vant';
 import Hnavbar from '@/components/Hnavbar.vue';
-import axios from 'axios';
+import request from '@/api/request';
 
 export default {
   data() {
@@ -45,6 +52,7 @@ export default {
       dataarr: [],
       isLoading: false,
       showShare: false,
+      dataComplete: false,
       options: [
         [
           { name: '微信', icon: 'wechat' },
@@ -61,6 +69,8 @@ export default {
       ],
     };
   },
+  computed: {
+  },
   components: {
     Hnavbar,
   },
@@ -68,14 +78,32 @@ export default {
     onRefresh() {
       setTimeout(() => {
         Toast('刷新成功');
+        this.getListData();
         this.isLoading = false;
       }, 1000);
     },
+    getListData() {
+      request.get('/index/apidata/get_business.html?', {
+        page: 1,
+        limit: 20,
+      }).then((res) => {
+        console.log(res);
+        this.dataarr = res.data.data;
+        this.dataComplete = true;
+      });
+    },
+  },
+  filters: {
+    time(value) {
+      const now = new Date(value * 1000);
+      const y = now.getFullYear();
+      const m = now.getMonth() + 1;
+      const d = now.getDate();
+      return `${y}-${m}-${d}`;
+    },
   },
   created() {
-    axios.get('/index/apidata/get_business.html?page=1&limit=20').then((res) => {
-      this.dataarr = res.data.data;
-    });
+    this.getListData();
   },
 };
 </script>
@@ -124,6 +152,13 @@ export default {
             align-items: center;
             font-size: 13px;
             color: #999;
+            .city{
+              width: 25%;
+              flex: 0;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
         }
         .from-url {
             flex: 0 1 auto;

@@ -12,10 +12,10 @@ module.exports = {
         target: 'http://suxiaomo.top/',
         changeOrigin: true,
       },
-      '/index/apidata': {
-        target: 'http://ide.msmn.cn/',
-        changeOrigin: true,
-      },
+      // '/index/apidata': {
+      //   target: 'http://ide.msmn.cn/',
+      //   changeOrigin: true,
+      // },
     },
   },
 };

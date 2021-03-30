@@ -10,19 +10,21 @@
                 fit="cover"
             />
         </div>
+        <loading v-if="showFlag"></loading>
+        <template v-else>
         <ul class="pagehome-number">
             <li class="number-all">
                 <van-icon name="after-sale" size="40" />
-                <b>9990090</b>
+                <b>{{volume}}</b>
                 下单小宝币
             </li>
             <li>
                 <div class="item">
-                    <b>0</b>
+                    <b>{{today_count}}</b>
                     近日点击量
                 </div>
                 <div class="item">
-                    <b>65</b>
+                    <b>{{data_count_all}}</b>
                     累计点击量
                 </div>
             </li>
@@ -32,25 +34,25 @@
                 <van-col span="12">
                     <div class="item">
                         <h2>百度点击</h2>
-                        <p>59</p>
+                        <p>{{data_count.baidu}}</p>
                     </div>
                 </van-col>
                 <van-col span="12">
                     <div class="item">
                         <h2>360点击</h2>
-                        <p>6</p>
+                        <p>{{data_count[360]}}</p>
                     </div></van-col
                 >
                 <van-col span="12">
                     <div class="item">
                         <h2>搜狗点击</h2>
-                        <p>0</p>
+                        <p>{{data_count.sogou}}</p>
                     </div></van-col
                 >
                 <van-col span="12">
                     <div class="item">
                         <h2>神马点击</h2>
-                        <p>0</p>
+                        <p>{{data_count.sm}}</p>
                     </div></van-col
                 >
             </van-row>
@@ -58,30 +60,49 @@
         <ul class="pagehome-percent">
             <li>
                 <div class="item">
-                    <b>65</b>
+                    <b>{{business_count.all}}</b>
                     商机总数
                 </div>
             </li>
             <li>
                 <div class="item">
-                    <b>0</b>
+                    <b>{{business_count.day30}}</b>
                     30天商机数
                 </div>
             </li>
             <li class="number-all">
                 <van-circle v-model="currentRate" layer-color="#ebedf0" :rate="rate"
-                    :color="gradientColor"
-                    text="42%"
+                    :color="gradientColor" :speed=30
+                    :text="sjpercent"
                 />
             </li>
         </ul>
+        </template>
     </div>
 </template>
 
 <script>
+import request from '@/api/request';
+import Loading from '@/components/Loading.vue';
+
 export default {
   data() {
     return {
+      showFlag: true,
+      business_count: {
+        all: '',
+        day30: '',
+        day90: '',
+      },
+      data_count: {
+        360: '',
+        baidu: '',
+        sm: '',
+        sogou: '',
+      },
+      data_count_all: '',
+      today_count: '',
+      volume: '',
       currentRate: 0,
       rate: 50,
       gradientColor: {
@@ -90,91 +111,34 @@ export default {
       },
     };
   },
+  computed: {
+    sjpercent() {
+      const fixedNum = (this.business_count.all / this.data_count_all) * 100;
+      return `${fixedNum.toFixed(2)}%`;
+    },
+  },
+  components: {
+    Loading,
+  },
+  methods: {
+    getHomeData() {
+      request.get('/index/Apidata/index_data').then((res) => {
+        const { data } = res.data;
+        this.business_count = data.business_count;
+        this.data_count = data.data_count;
+        this.data_count_all = data.data_count_all;
+        this.today_count = data.today_count;
+        this.volume = data.volume;
+        this.showFlag = false;
+      });
+    },
+  },
+  created() {
+    this.getHomeData();
+  },
 };
 </script>
 
 <style scoped lang="less">
-.pagehome-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #009688;
-    padding: 8px 3%;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    h1 {
-        color: #fff;
-        font-size: 16px;
-    }
-}
-.pagehome-number {
-    background: #009688;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-    text-align: left;
-    margin: 2% 1%;
-    border-radius: 5px;
-    li {
-        width: 40%;
-        flex: 0 0 auto;
-    }
-    .number-all {
-        width: 42%;
-        padding-left: 8%;
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    b {
-        display: block;
-        font-size: 30px;
-    }
-    .item {
-        padding: 10px 0;
-    }
-}
-// 百度点击
-.click-number {
-    background: #efefef;
-    margin: 2% 1%;
-    border-radius: 5px;
-    padding: 1%;
-    .van-col {
-        padding: 1%;
-        .item {
-            background: #fff;
-            border-radius: 5px;
-        }
-        h2 {
-            font-size: 14px;
-            text-align: left;
-            border-bottom: 1px solid #ececec;
-            padding: 9px 10px;
-        }
-        p {
-            font-size: 30px;
-            padding: 19px 0;
-        }
-    }
-}
-
-.pagehome-percent {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #009688;
-    margin: 2% 1%;
-    border-radius: 5px;
-    color: #fff;
-    padding: 3%;
-    .item {
-        text-align: center;
-        color: #ddd;
-        font-size: 12px;
-        b {
-            display: block;
-            font-size: 42px;
-        }
-    }
-}
+@import url('~@/assets/styles/pagehome.less');
 </style>

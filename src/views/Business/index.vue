@@ -1,49 +1,70 @@
 <template>
     <div class="business-container">
         <Hnavbar></Hnavbar>
-        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-            <ul>
-                <li
-                    v-for="item in dataarr"
-                    :key="item.id"
-                    @click="showShare = true"
-                >
-                    <div class="tit">
-                        <div class="name">
-                            <van-badge dot color='#1989fa' v-if="item.is_read">
-                              <div class="child" />
-                            </van-badge>
-                            <van-badge dot v-else>
-                              <div class="child" />
-                            </van-badge>
-                            <span>{{ item.name }}</span>
-                        </div>
-                        <div class="tel">{{ item.phone }}</div>
-                    </div>
-                    <div class="desc-wrap">
-                        <div class="desc">{{ item.content }}</div>
-                        <div class="time">
-                            <span>{{ item.create_time|time }}</span>
-                            <span class="city">
-                              {{ item.province + item.district }}
-                            </span>
-                            <span class="from-url">来源：{{ item.url }}</span>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </van-pull-refresh>
-        <!-- <van-share-sheet
-            v-model="showShare"
-            title="立即分享给好友"
-            :options="options"
-        /> -->
+        <loading v-if="showListFlag"></loading>
+        <template v-else>
+            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+                <!-- <van-list
+                    v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad"
+                > -->
+                    <ul>
+                        <li
+                            v-for="item in dataarr"
+                            :key="item.id"
+                            @click="showShare = true"
+                        >
+                            <div class="tit">
+                                <div class="name">
+                                    <van-badge
+                                        dot
+                                        color="#1989fa"
+                                        v-if="item.is_read"
+                                    >
+                                        <div class="child" />
+                                    </van-badge>
+                                    <van-badge dot v-else>
+                                        <div class="child" />
+                                    </van-badge>
+
+                                    <span v-if="item.name">{{
+                                        item.name
+                                    }}</span>
+                                    <span v-else>{{ item.ip }}</span>
+                                </div>
+                                <div class="tel">{{ item.phone }}</div>
+                            </div>
+                            <div class="desc-wrap">
+                                <div class="desc">{{ item.content }}</div>
+                                <div class="time">
+                                    <span>{{ item.create_time | time }}</span>
+                                    <span class="city">
+                                        {{ item.province + item.district }}
+                                    </span>
+                                    <span class="from-url"
+                                        >来源：{{ item.url }}</span
+                                    >
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                <!-- </van-list> -->
+            </van-pull-refresh>
+            <!-- <van-share-sheet
+              v-model="showShare"
+              title="立即分享给好友"
+              :options="options"
+          /> -->
+        </template>
     </div>
 </template>
 
 <script>
 import { Toast } from 'vant';
 import Hnavbar from '@/components/Hnavbar.vue';
+import Loading from '@/components/Loading.vue';
 import request from '@/api/request';
 
 export default {
@@ -53,6 +74,9 @@ export default {
       isLoading: false,
       showShare: false,
       dataComplete: false,
+      showListFlag: true,
+      page: 1,
+      limit: 20,
       options: [
         [
           { name: '微信', icon: 'wechat' },
@@ -69,28 +93,31 @@ export default {
       ],
     };
   },
-  computed: {
-  },
+  computed: {},
   components: {
     Hnavbar,
+    Loading,
   },
   methods: {
     onRefresh() {
+      this.showListFlag = true;
       setTimeout(() => {
         Toast('刷新成功');
         this.getListData();
         this.isLoading = false;
       }, 1000);
     },
-    getListData() {
-      request.get('/index/apidata/get_business.html?', {
-        page: 1,
-        limit: 20,
-      }).then((res) => {
-        console.log(res);
-        this.dataarr = res.data.data;
-        this.dataComplete = true;
-      });
+    getListData(page, limit) {
+      request
+        .get('/index/Apidata/get_business', {
+          page,
+          limit,
+        })
+        .then((res) => {
+          this.dataarr = res.data.data;
+          this.dataComplete = true;
+          this.showListFlag = false;
+        });
     },
   },
   filters: {
@@ -103,71 +130,11 @@ export default {
     },
   },
   created() {
-    this.getListData();
+    this.getListData(this.page, this.limit);
   },
 };
 </script>
 
 <style scoped lang="less">
-.business-container {
-    background: #f1f1f1;
-    li {
-        border: 1px solid #e6e6e6;
-        background: #fff;
-        margin: 1% 1% 2%;
-        border-radius: 4px;
-        .tit {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px 2%;
-            border-bottom: 1px solid #e4e4e4;
-            .name {
-                display: flex;
-                align-items: center;
-                span {
-                    margin-left: 10px;
-                    font-size: 18px;
-                }
-            }
-            .tel {
-                font-size: 16px;
-                color: #444;
-            }
-        }
-        .desc-wrap {
-            padding: 0px 8px 8px 17px;
-        }
-        .desc {
-            text-align: left;
-            font-size: 13px;
-            margin: 10px 0 16px;
-            line-height: 20px;
-            height: 40px;
-            overflow: hidden;
-        }
-        .time {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: #999;
-            .city{
-              width: 25%;
-              flex: 0;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            }
-        }
-        .from-url {
-            flex: 0 1 auto;
-            width: 50%;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            display: block;
-        }
-    }
-}
+@import url("~@/assets/styles/business.less");
 </style>

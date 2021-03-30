@@ -1,5 +1,6 @@
 // 拦截器
 import axios from 'axios';
+import { Dialog } from 'vant';
 import router from '../router';
 
 const ins = axios.create({});
@@ -16,11 +17,13 @@ ins.interceptors.request.use((config) => {
 // 拦截器  获取请求的时候 (可以先一步处理data数据)
 ins.interceptors.response.use((config) => {
   const configs = config;
-  console.log('configs', configs);
 
-  if (configs.data.code !== 200) {
-    console.log('跳转到登录页');
-    router.push({ path: '/login' });
+  if (configs.data.code !== 200 && configs.data.code !== 0) {
+    Dialog.alert({
+      message: '登录已过期，请重新登录',
+    }).then(() => {
+      router.push({ path: '/login' });
+    });
   }
   return configs;
 });

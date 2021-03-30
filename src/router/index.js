@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/business',
     name: 'Business',
-    component: () => import('../views/Business/index.vue'),
+    component: () => import('../views/Business/index1.vue'),
   },
   {
     path: '/login',

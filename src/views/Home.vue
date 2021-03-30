@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="home-container">
         <PageHome></PageHome>
         <button @click="handleClick">获取点击量</button>
         <button @click="delToken">删除token</button>
@@ -34,3 +34,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.home-container{
+  margin-bottom: 52px;
+}
+</style>

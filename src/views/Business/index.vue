@@ -4,12 +4,6 @@
         <loading v-if="showListFlag"></loading>
         <template v-else>
             <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-                <!-- <van-list
-                    v-model="loading"
-                    :finished="finished"
-                    finished-text="没有更多了"
-                    @load="onLoad"
-                > -->
                     <ul>
                         <li
                             v-for="item in dataarr"
@@ -50,13 +44,7 @@
                             </div>
                         </li>
                     </ul>
-                <!-- </van-list> -->
             </van-pull-refresh>
-            <!-- <van-share-sheet
-              v-model="showShare"
-              title="立即分享给好友"
-              :options="options"
-          /> -->
         </template>
     </div>
 </template>

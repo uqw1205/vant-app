@@ -1,7 +1,7 @@
 // 拦截器
 import axios from 'axios';
-import { Dialog } from 'vant';
-import router from '../router';
+import store from '../store/index';
+import router from '../router/index';
 
 const ins = axios.create({});
 
@@ -14,16 +14,19 @@ ins.interceptors.request.use((config) => {
   return configs;
 });
 
+function getToken() {
+  axios.get('/index/Jwtdata/get_token_demo').then((res) => {
+    const { data } = res;
+    store.commit('set_token', data.token.token);
+    router.go(0);
+  });
+}
+
 // 拦截器  获取请求的时候 (可以先一步处理data数据)
 ins.interceptors.response.use((config) => {
   const configs = config;
-
   if (configs.data.code !== 200 && configs.data.code !== 0) {
-    Dialog.alert({
-      message: '登录已过期，请重新登录',
-    }).then(() => {
-      router.push({ path: '/login' });
-    });
+    getToken();
   }
   return configs;
 });

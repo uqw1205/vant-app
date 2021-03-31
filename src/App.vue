@@ -1,6 +1,8 @@
 <template>
     <div id="app">
-        <router-view></router-view>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
         <div class="nav-fix">
             <div class="nav-item" v-for="(item,index) in menuList" :key="index">
                 <router-link :to="{name: item.name}" :exact="item.exact">
@@ -34,6 +36,13 @@ export default {
           icon: 'balance-pay',
         },
         {
+          name: 'Callhistory',
+          path: '/callhistory',
+          exact: true,
+          title: '通话',
+          icon: 'service-o',
+        },
+        {
           name: 'Login',
           path: '/login',
           exact: false,
@@ -42,6 +51,8 @@ export default {
         },
       ],
     };
+  },
+  methods: {
   },
 };
 </script>

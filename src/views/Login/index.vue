@@ -44,7 +44,7 @@ export default {
         request.get(
           '/index/Jwtdata/get_token_demo',
         ).then((res) => {
-          console.log(res);
+          console.log(this);
 
           const { data } = res;
           this.$store.commit('set_token', data.token.token);

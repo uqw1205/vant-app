@@ -1,6 +1,6 @@
 <template>
     <van-nav-bar
-        title="标题"
+        :title="title"
         left-text="返回"
         left-arrow
         fixed
@@ -12,6 +12,12 @@
 <script>
 
 export default {
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+  },
   methods: {
     onClickLeft() {
       this.$router.go(-1);

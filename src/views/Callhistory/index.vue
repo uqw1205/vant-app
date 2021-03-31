@@ -1,6 +1,6 @@
 <template>
-  <div class="business-container">
-    <Hnavbar title="全部商机"></Hnavbar>
+  <div class="callhistory-container business-container">
+    <Hnavbar title="通话记录"></Hnavbar>
     <loading v-if="showListFlag"></loading>
     <template v-else>
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
@@ -11,26 +11,11 @@
           @load="onLoad"
         >
           <van-cell v-for="item in dataarr" :key="item.id">
-            <div class="tit">
-              <div class="name">
-                <van-badge dot color="#1989fa" v-if="item.is_read">
-                  <div class="child" />
-                </van-badge>
-                <van-badge dot v-else>
-                  <div class="child" />
-                </van-badge>
-                <span v-if="item.name">{{ item.name }}</span>
-                <span v-else>{{ item.ip }}</span>
-              </div>
-              <div class="tel">{{ item.phone }}</div>
-            </div>
             <div class="desc-wrap">
-              <div class="desc">{{ item.content }}</div>
+							<div class="form-call">来电号码：{{item.call_no}}</div>
+							<div class="get-call">接听电话：{{item.called_no}}</div>
               <div class="time">
-                <span>{{ item.create_time | time }}</span>
-                <span class="city">
-                  {{ item.province + item.district }}
-                </span>
+                <span>{{ item.ring_time | time }}</span>
                 <span class="from-url">来源：{{ item.url }}</span>
               </div>
             </div>
@@ -89,7 +74,7 @@ export default {
       this.page += 1;
       setTimeout(() => {
         request
-          .post('/index/Apidata/get_business', {
+          .post('/index/Apidata/webcall', {
             page: this.page,
             limit: 20,
           })
@@ -105,7 +90,7 @@ export default {
     getListData(page) {
       // 获取数据
       request
-        .post('/index/Apidata/get_business', {
+        .post('/index/Apidata/webcall', {
           page,
           limit: 20,
         })
@@ -137,34 +122,13 @@ export default {
     z-index: 99;
 }
 .van-cell{
-        border: 1px solid #e6e6e6;
+        border-bottom: 1px solid #e6e6e6;
         background: #fff;
-        margin: 1% 1% 2%;
-        border-radius: 4px;
-    width: auto;
-    padding: 0;
-        .tit {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 2% 7px 6%;
-            border-bottom: 1px solid #e4e4e4;
-            line-height: 1;
-            .name {
-                display: flex;
-                align-items: center;
-                span {
-                    margin-left: 10px;
-                    font-size: 15px;
-                }
-            }
-            .tel {
-                font-size: 15px;
-                color: #666;
-            }
-        }
+        margin: 1%;
+				width: auto;
+				padding: 0;
         .desc-wrap {
-            padding: 0px 8px 8px 17px;
+            padding: 8px;
         }
         .desc {
             text-align: left;
@@ -180,6 +144,7 @@ export default {
             align-items: center;
             font-size: 13px;
             color: #999;
+						margin-top: 7px;
             .city {
                 width: 25%;
                 flex: 0 0 auto;

@@ -15,6 +15,11 @@ const routes = [
     component: () => import('../views/Business/index1.vue'),
   },
   {
+    path: '/callhistory',
+    name: 'Callhistory',
+    component: () => import('../views/Callhistory/index.vue'),
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login/index.vue'),

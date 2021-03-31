@@ -2,13 +2,12 @@
     <div class="pagehome-container">
         <div class="pagehome-header">
             <h1>商小宝-商家管理中心</h1>
-            <van-image
-                round
-                width="30px"
-                height="30px"
-                src="https://img01.yzcdn.cn/vant/cat.jpeg"
-                fit="cover"
-            />
+            <van-icon name="apps-o" @click="handleShowMenu" />
+            <ul v-show="isShowMenu">
+              <li>流量统计</li>
+              <li>通话记录</li>
+              <li>信息管理</li>
+            </ul>
         </div>
         <loading v-if="showFlag"></loading>
         <template v-else>
@@ -88,6 +87,7 @@ import Loading from '@/components/Loading.vue';
 export default {
   data() {
     return {
+      isShowMenu: false, // 是否显示menu菜单
       showFlag: true,
       business_count: {
         all: '',
@@ -131,6 +131,9 @@ export default {
         this.volume = data.volume;
         this.showFlag = false;
       });
+    },
+    handleShowMenu() {
+      this.isShowMenu = !this.isShowMenu;
     },
   },
   created() {

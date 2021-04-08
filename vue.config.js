@@ -9,11 +9,11 @@ module.exports = {
   devServer: {
     proxy: {
       '/index': {
-        target: 'http://suxiaomo.top/',
+        target: 'http://suxiaomo.qicp.vip/',
         changeOrigin: true,
       },
-      '/index/apidata': {
-        target: 'http://suxiaomo.top/',
+      '/index/Apidata': {
+        target: 'http://suxiaomo.qicp.vip/',
         changeOrigin: true,
       },
     },

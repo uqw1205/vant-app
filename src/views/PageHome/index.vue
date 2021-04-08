@@ -124,6 +124,9 @@ export default {
     getHomeData() {
       request.get('/index/Apidata/index_data').then((res) => {
         const { data } = res.data;
+        if (JSON.stringify(data) === '{}') {
+          return;
+        }
         this.business_count = data.business_count;
         this.data_count = data.data_count;
         this.data_count_all = data.data_count_all;
